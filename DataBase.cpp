@@ -89,17 +89,17 @@ bool DataBaseManager::saveDataToTable(QString tableName, QStringList dataList)
 
     Q_ASSERT(dataList.size() == record.count());
 
-    for (int i = 0; i < list.size(); ++i)
+    for (int i = 0; i < dataList.size(); ++i)
     {
-        record.setValue(i, list.value(i));
+        record.setValue(i, dataList.value(i));
     }
 
-    bool isInsert = m_model->insertRecord(0, record);
+    bool isInsert = model->insertRecord(0, record);
     if(isInsert == false)
     {
-        qDebug() << m_model->lastError().text();
+        qDebug() << model->lastError().text();
     }
-    m_model->submitAll();
+    model->submitAll();
 
     return true;
 }
