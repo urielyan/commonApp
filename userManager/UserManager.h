@@ -1,15 +1,16 @@
-#ifndef USERMANAGER_H
+﻿#ifndef USERMANAGER_H
 #define USERMANAGER_H
 
 #include <QItemSelection>
 #include <QWidget>
+#include <Widget.h>
 
 namespace Ui {
 class UserManager;
 }
 
 class QSqlTableModel;
-class UserManager : public QWidget
+class UserManager : public Widget
 {
     Q_OBJECT
 

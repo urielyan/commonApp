@@ -17,6 +17,7 @@
 class QSqlTableModel;
 class QSqlDatabase;
 class QSqlQueryModel;
+class QSqlRecord;
 class DataBaseManager : public QObject
 {
     Q_OBJECT
@@ -50,6 +51,7 @@ public:
      *  @return: 成功返回true，否则false。
      */
     bool saveDataToTable(QString tableName, QStringList dataList);
+    bool saveDataToTable(QString tableName, QSqlRecord record);
 
     QString connectionName() const;
     void setConnectionName(const QString &connectionName);
@@ -59,6 +61,12 @@ public:
 
     int tableCount() const;
     void setTableCount(int tableCount);
+
+    bool contains(QString tableName);
+
+    QStringList tables() const;
+    bool createTable(QString tableName, QString recordNames);
+    bool createTable(QString tableName, QStringList recordNames);
 
 signals:
 

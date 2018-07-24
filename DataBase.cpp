@@ -1,5 +1,4 @@
 ﻿#include "DataBase.h"
-//#include "Defines.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -46,7 +45,6 @@ bool DataBaseManager::init()
 
     if(m_db->open())
     {
-        //判断表是否存在，若不存在，则执行建表操作
         foreach (QString table, m_db->tables()) {
             QSqlTableModel * model= new QSqlTableModel(this, *m_db);
             model->setTable(table);
@@ -82,17 +80,66 @@ QSqlTableModel *DataBaseManager::model(QString tableName) const
 
 bool DataBaseManager::saveDataToTable(QString tableName, QStringList dataList)
 {
+    //quint64 dateTime = QDateTime::currentMSecsSinceEpoch();
+    //qDebug() << "-----start" << dateTime;
     Q_ASSERT(m_tables.contains(tableName));
+    QString values;
+    foreach (QString str, dataList) {
+        values.append("\'");
+        values.append(str);
+        values.append("\'");
+        values.append(", ");
+    }
+    values.chop(2);
+    //qDebug() << QDateTime::currentMSecsSinceEpoch() - dateTime;
 
-    QSqlTableModel *model = m_tables.value(tableName);
-    QSqlRecord record = model->record();
+    QSqlQuery query(*m_db);
+    //qDebug() << QDateTime::currentMSecsSinceEpoch() - dateTime;
+    QString insertTable =     QString(
+                "insert into '%1' values(%2)")
+            .arg(tableName).arg(values);
+    //qDebug() << insertTable;
+    if (!query.exec(insertTable))
+    {
+        //qDebug() << query.lastError();
+        return false;
+    }
+    //qDebug() << QDateTime::currentMSecsSinceEpoch() - dateTime;
 
+    return true;
+
+//    QSqlTableModel *model = m_tables.value(tableName);
+    QSqlTableModel model(this, *m_db);
+    model.setTable(tableName);
+    //qDebug() <<model.lastError();
+    model.select();
+    QSqlRecord record = model.record();
+    //qDebug() << m_db->tables();
+
+
+    qDebug() << dataList.size() <<  record.count() << tableName;
     Q_ASSERT(dataList.size() == record.count());
 
     for (int i = 0; i < dataList.size(); ++i)
     {
         record.setValue(i, dataList.value(i));
     }
+
+    bool isInsert = model.insertRecord(0, record);
+    if(isInsert == false)
+    {
+        qDebug() << model.lastError().text();
+    }
+    model.submitAll();
+
+    return true;
+}
+
+bool DataBaseManager::saveDataToTable(QString tableName, QSqlRecord record)
+{
+    //qDebug() << m_tables;
+    Q_ASSERT(m_tables.contains(tableName));
+    QSqlTableModel *model = m_tables.value(tableName);
 
     bool isInsert = model->insertRecord(0, record);
     if(isInsert == false)
@@ -101,7 +148,7 @@ bool DataBaseManager::saveDataToTable(QString tableName, QStringList dataList)
     }
     model->submitAll();
 
-    return true;
+    return isInsert;
 }
 
 QString DataBaseManager::connectionName() const
@@ -132,4 +179,47 @@ int DataBaseManager::tableCount() const
 void DataBaseManager::setTableCount(int tableCount)
 {
     m_tableCount = tableCount;
+}
+
+bool DataBaseManager::contains(QString tableName)
+{
+    return m_tables.contains(tableName);
+}
+
+QStringList DataBaseManager::tables() const
+{
+    return m_tables.keys();
+}
+
+bool DataBaseManager::createTable(QString tableName, QString recordNames)
+{
+    QSqlQuery query(*m_db);
+
+    QString createTable = QString(
+        "create table '%1' (%2)"
+        ).arg(tableName).arg(recordNames);
+    qDebug() << createTable;
+    if (!query.exec(createTable))
+    {
+        return false;
+    }
+
+    QSqlTableModel * model= new QSqlTableModel(this, *m_db);
+    model->setTable(tableName);
+    model->select();
+    m_tables[tableName] = model;
+    return true;
+}
+
+bool DataBaseManager::createTable(QString tableName, QStringList recordNames)
+{
+    QString fields;
+
+    foreach (QString str, recordNames) {
+        fields.append(str);
+        fields.append(" STRING, ");
+    }
+    fields.chop(2);
+
+    return createTable(tableName, fields);
 }

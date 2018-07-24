@@ -5,16 +5,29 @@
 #include "Widget.h"
 
 #include <QDebug>
+#include <QLabel>
+#include <QStackedLayout>
+#include <QStackedWidget>
 
 MainWindow *MainWindow::s_instance = 0;
+void MainWindow::initStackedWidget()
+{
+    this->setCentralWidget(m_stackedWidget);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_databaseManager(new DataBaseManager(this))
+    , m_stackedWidget(new QStackedWidget(this))
 {
 }
 
 MainWindow::~MainWindow()
 {
+    foreach (QWidget *widget, m_stackedWidgetIsDelete.keys()) {
+        m_stackedWidgetIsDelete.remove(widget);
+        delete widget;
+    }
 }
 
 MainWindow *MainWindow::instance()
@@ -67,7 +80,7 @@ void MainWindow::navigate(QWidget *widget)
         oldW->onExit();
     }
 
-    setCentralWidget(widget);
+    //setCentralWidget(widget);
 
     Widget *newW = NULL;
     newW = static_cast<Widget*>(widget);
@@ -75,4 +88,21 @@ void MainWindow::navigate(QWidget *widget)
     {
         newW->onEntry();
     }
+}
+
+void MainWindow::setCurrentWidget(QWidget *widget, bool isDelete)
+{
+    qDebug() << m_stackedWidgetIsDelete.size();
+    QWidget *currentWidget = m_stackedWidget->currentWidget();
+    if (m_stackedWidgetIsDelete.contains(currentWidget) &&
+            m_stackedWidgetIsDelete.value(currentWidget))
+    {
+        m_stackedWidget->removeWidget(currentWidget);
+        m_stackedWidgetIsDelete.remove(currentWidget);
+        delete currentWidget;
+    }
+
+    m_stackedWidget->addWidget(widget);
+    m_stackedWidget->setCurrentWidget(widget);
+    m_stackedWidgetIsDelete[widget] = isDelete;
 }

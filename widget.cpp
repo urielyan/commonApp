@@ -1,4 +1,4 @@
-#include "includes.h"
+﻿#include "includes.h"
 #include "Widget.h"
 
 #include <QDebug>
@@ -10,12 +10,17 @@ Widget::Widget(QWidget *parent)
     connect(this, &Widget::navigate, MAINWINDOW, &MainWindow::navigate);
 }
 
+Widget::~Widget()
+{
+    onExit();
+}
+
 void Widget::onEntry()
 {
-    //TODO
+    qDebug() << this->objectName();
 }
 
 void Widget::onExit()
 {
-    //TODO
+    qDebug() << this->objectName();
 }

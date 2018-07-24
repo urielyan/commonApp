@@ -2,9 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
 
 class DataBaseManager;
 class QActionGroup;
+class QStackedLayout;
+class QStackedWidget;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,6 +30,10 @@ public:
 
 public slots:
     void navigate(QWidget *widget);
+    void setCurrentWidget(QWidget *widget, bool isDelete = false);
+
+protected:
+    void initStackedWidget();
 
 protected:
     static MainWindow *s_instance;
@@ -34,6 +41,8 @@ protected:
     DataBaseManager *m_databaseManager;
     int m_accessMode;
 
+    QStackedWidget *m_stackedWidget;
+    QMap<QWidget*, bool> m_stackedWidgetIsDelete;
 };
 
 #endif // MAINWINDOW_H

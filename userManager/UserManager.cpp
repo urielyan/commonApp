@@ -7,7 +7,7 @@
 #include <QDebug>
 
 UserManager::UserManager(QWidget *parent) :
-    QWidget(parent),
+    Widget(parent),
     ui(new Ui::UserManager)
 {
     ui->setupUi(this);
