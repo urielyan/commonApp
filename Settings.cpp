@@ -1,5 +1,5 @@
 ﻿#include "includes.h"
-#include "common/Settings.h"
+#include "Settings.h"
 
 #include <QSettings>
 #include <QMetaObject>
