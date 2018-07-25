@@ -24,13 +24,14 @@ public:
 protected:
 
 private slots:
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
     void on_deleteSelectUser_clicked();
 
     void on_addUser_clicked();
 
     void on_altPasswd_clicked();
+
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
     Ui::UserManager *ui;

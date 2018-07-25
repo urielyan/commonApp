@@ -80,5 +80,4 @@ private:
     int m_tableCount;                               //!< 共有多少个表，验证init函数是否正确初始化
     QMap<QString, QSqlTableModel*> m_tables;
 };
-
 #endif // DATABASE_H

@@ -33,7 +33,6 @@ DataBaseManager::~DataBaseManager()
         delete m_db;
         m_db = NULL;
     }
-    qDebug() << __FILE__ << __LINE__;
 }
 
 bool DataBaseManager::init()
