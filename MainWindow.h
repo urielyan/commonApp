@@ -34,7 +34,11 @@ public slots:
 
 protected:
     void initStackedWidget();
+    void initUserManagerWidget();
+    void initDataBaseManager(QString dbPath);
 
+protected slots:
+    virtual void userManaggerActionClicked();
 protected:
     static MainWindow *s_instance;
     QString m_currentUserName;

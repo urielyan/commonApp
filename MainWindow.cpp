@@ -4,10 +4,16 @@
 #include "MainWindow.h"
 #include "Widget.h"
 
+#include <QAction>
 #include <QDebug>
 #include <QLabel>
 #include <QStackedLayout>
 #include <QStackedWidget>
+#include <QMenuBar>
+#include <QFile>
+#include <QApplication>
+
+#include "UserManager.h"
 
 MainWindow *MainWindow::s_instance = 0;
 void MainWindow::initStackedWidget()
@@ -15,11 +21,50 @@ void MainWindow::initStackedWidget()
     this->setCentralWidget(m_stackedWidget);
 }
 
+void MainWindow::initUserManagerWidget()
+{
+    QAction *userManagerAction = new QAction(tr("用户管理"), this);
+    //this->addAction(userManagerAction);
+    //this->menuBar()->addAction(userManagerAction);
+    QMenu *userMenu = new QMenu(tr("帮助"),this);
+    userMenu->addAction(userManagerAction);
+    this->menuBar()->addMenu(userMenu);
+    //this->
+    connect(userManagerAction, &QAction::triggered,
+            this, &MainWindow::userManaggerActionClicked);
+}
+
+void MainWindow::initDataBaseManager(QString dbPath)
+{
+    qDebug() <<  "+++Set DB Path+++" << dbPath;
+    Q_ASSERT(QFile(dbPath).exists());
+    m_databaseManager->setDatabaseName(dbPath);
+    m_databaseManager->setConnectionName(QApplication::applicationName());
+    //m_databaseManager->setTableCount(1);
+    Q_ASSERT(m_databaseManager->init() == true);
+    qDebug() << m_databaseManager->tables();
+}
+
+void MainWindow::userManaggerActionClicked()
+{
+    qDebug() << "test";
+    UserManager *manager = new UserManager(this);
+    if (this->centralWidget() == m_stackedWidget)
+    {
+        if (m_databaseManager->contains("user"))
+        {
+            manager->setModel(m_databaseManager->model("user"));
+        }
+        this->setCurrentWidget(manager, true);
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_databaseManager(new DataBaseManager(this))
     , m_stackedWidget(new QStackedWidget(this))
 {
+    //initStackedWidget(); //必须在子类中调用一遍，否则不能使用setCurrentWidget()
 }
 
 MainWindow::~MainWindow()

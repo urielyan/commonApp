@@ -63,7 +63,7 @@ int visualStudioPrintf( const char* fmt, ... )
     static char szBuffer[4096];
     count = vsnprintf_s(szBuffer, sizeof(szBuffer) / sizeof(szBuffer[0]), fmt, ap);
 
-    OutputDebugStringA(szBuffer);
+    //OutputDebugStringA(szBuffer);
 
     //输出到终端
 #if defined _MSC_VER && defined _DEBUG && defined ENABLE_CONSOLE
