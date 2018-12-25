@@ -138,6 +138,7 @@ void MainWindow::navigate(QWidget *widget)
 void MainWindow::setCurrentWidget(QWidget *widget, bool isDelete)
 {
     qDebug() << m_stackedWidgetIsDelete.size();
+     qDebug() << "test";
     QWidget *currentWidget = m_stackedWidget->currentWidget();
     if (m_stackedWidgetIsDelete.contains(currentWidget) &&
             m_stackedWidgetIsDelete.value(currentWidget))
@@ -146,6 +147,7 @@ void MainWindow::setCurrentWidget(QWidget *widget, bool isDelete)
         m_stackedWidgetIsDelete.remove(currentWidget);
         delete currentWidget;
     }
+    qDebug() << "test";
 
     m_stackedWidget->addWidget(widget);
     m_stackedWidget->setCurrentWidget(widget);

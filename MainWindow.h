@@ -47,6 +47,13 @@ protected:
 
     QStackedWidget *m_stackedWidget;
     QMap<QWidget*, bool> m_stackedWidgetIsDelete;
+
+private:
+    void setCentralWidget(QWidget *widget)
+    {
+        QMainWindow::setCentralWidget(widget);
+    }
+
 };
 
 #endif // MAINWINDOW_H

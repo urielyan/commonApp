@@ -1,4 +1,5 @@
 include(userManager/usermanager.pri)
+include(navButton/navButton.pri)
 
 INCLUDEPATH += $$PWD
 
