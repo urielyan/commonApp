@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QSplashScreen>
 
+class SettingsManager;
 class App : public QApplication
 {
     Q_OBJECT
@@ -29,12 +30,22 @@ public:
     QString logFilePath() const;
     void setLogFilePath(const QString &logFilePath);
 
+
+    /**
+     * @brief   定义全局系统配置对象
+     * @param[in]
+     * @return 全局系统配置对象
+     * @note
+     */
+    SettingsManager* settingsManager() const;
+
 signals:
 
 public slots:
 
 
 private:
+    SettingsManager     *m_settingsManager;  //!< 全局唯一的系统配置对象。
     MainWindow*         m_mainWindow;       //!< 全局唯一的主窗口对象
     QSplashScreen       m_splash;           //!< 欢迎界面
 

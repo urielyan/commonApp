@@ -57,8 +57,109 @@ protected:
      */
     PropertyList allStoredProperties() const;
 };
-
 typedef QList<Settings*> SettingsList;
+
+
+/**
+ * @class SettingsManager
+ * @brief 用于统一管理系统中的各个对象的可配置参数，提供保存，载入等功能
+ * 访问其中的设置项采用key的形式进行，key的一般格式为 "前缀名称/属性名称" 例如： "setttingsTest/name" 表示 通用设置->音量
+ *      [1]...  SettingsTest
+ *      [3]...
+ */
+class SettingsManager : public Settings
+{
+    Q_OBJECT
+    Q_PROPERTY(SettingsList allSettings READ allSettings WRITE setAllSettings)
+
+public:
+    SettingsManager();
+    virtual ~SettingsManager();
+
+    /**
+     * 从ini文件载入所有的系统设置
+     * @return     成功返回true
+     */
+    virtual bool load(const QString& iniPath) Q_DECL_OVERRIDE;
+
+    /**
+     * 保存所有的系统设置到ini文件
+     * @return     成功返回true
+     */
+    virtual bool save(const QString& iniPath) Q_DECL_OVERRIDE;
+
+    /**
+     * 重置所有设置为默认值
+     */
+    virtual void reset() Q_DECL_OVERRIDE;
+
+    /**
+     * 根据key获取当前指定项系统设置的值
+     * @param[in]  key      键值(例如："printer/xOffset")
+     * @return     QVariant 成功返回有效的值
+     */
+    QVariant value(const QString& key);
+
+    /**
+     * 根据key设置当前指定项系统设置的值
+     * @param[in]  key      键值(例如："printer/xOffset")
+     * @param[in]  value    需要设置的值
+     * @return     bool     成功返回true
+     */
+    bool setValue(const QString& key, const QVariant& value);
+
+    /**
+     * getter/setter for m_allSettings
+     */
+    void setAllSettings(const SettingsList& allSettings)
+    {
+        foreach (Settings* settings, allSettings)
+        {
+            addSettings(settings);
+        }
+    }
+    SettingsList allSettings() const
+    {
+        return m_allSettings;
+    }
+
+public:
+    void addSettings(Settings* settings);
+
+protected:
+    SettingsList m_allSettings;                 //!< 系统的所有设置项的列表
+};
+
+class SettingsTest : public Settings
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged RESET resetName)
+public:
+    explicit SettingsTest()
+        : Settings()
+        , name("default")
+    {
+
+    }
+
+    QString getName() const{return name;}
+    void setName(const QString &value)
+    {
+        if (name == value)
+        {
+            emit nameChanged();
+            name = value;
+        }
+    }
+    void resetName(){name = "name";}
+signals:
+    void nameChanged();
+
+public slots:
+
+private:
+    QString name;
+};
 
 #endif // __SETTINGS_H
 /*********************************************************************************************************

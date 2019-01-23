@@ -46,7 +46,9 @@ bool Settings::save(const QString& iniPath)
 {
     QSettings iniFile(iniPath, QSettings::IniFormat);
     if (iniFile.status() != QSettings::NoError)
+    {
         return false;
+    }
 
     bool ok = true;
     PropertyList storedProperties = allStoredProperties();
@@ -102,6 +104,130 @@ Settings::PropertyList Settings::allStoredProperties() const
 
     return properties;
 }
+
+
+
+//用于定义SettingsManager
+SettingsManager::SettingsManager()
+    : Settings()
+{
+    Settings* settings = NULL;
+    qDebug() << m_allSettings.size() << __LINE__;
+    settings = new SettingsTest();
+    settings->setObjectName("test");
+    addSettings(settings);
+    qDebug() << m_allSettings.size() << __LINE__;
+}
+
+SettingsManager::~SettingsManager()
+{
+}
+
+/**
+ * 重置所有设置为默认值
+ */
+void SettingsManager::reset()
+{
+    foreach (Settings* settings, m_allSettings)
+    {
+        settings->reset();
+    }
+}
+
+/**
+ * 从ini文件载入所有的系统设置
+ * @return     成功返回true
+ */
+bool SettingsManager::load(const QString& iniPath)
+{
+    bool ok = true;
+
+    foreach (Settings* settings, m_allSettings)
+    {
+        if (!settings->load(iniPath))
+        {
+            ok = false;
+        }
+    }
+
+    return ok;
+}
+
+/**
+ * 保存所有的系统设置到ini文件
+ * @return     成功返回true
+ */
+bool SettingsManager::save(const QString& iniPath)
+{
+    bool ok = true;
+
+    foreach (Settings* settings, m_allSettings)
+    {
+        if (!settings->save(iniPath))
+        {
+            ok = false;
+        }
+    }
+
+    return ok;
+}
+
+/**
+ * 根据key获取当前指定项系统设置的值
+ * @param[in]  key      键值(例如："printer/xOffset")
+ * @return     QVariant 成功返回有效的值
+ */
+QVariant SettingsManager::value(const QString& key)
+{
+    QStringList keys = key.split('/');
+    if (keys.count() == 2)
+    {
+        const QString& settingsName = keys[0];
+        const QString& propertyName = keys[1];
+        foreach (Settings* settings, m_allSettings)
+        {
+            if (settings->objectName() == settingsName)
+            {
+                return settings->property(propertyName.toLatin1());
+            }
+        }
+    }
+    return QVariant();
+}
+
+/**
+ * 根据key设置当前指定项系统设置的值
+ * @param[in]  key      键值(例如："printer/xOffset")
+ * @param[in]  value    需要设置的值
+ * @return     bool     成功返回true
+ */
+bool SettingsManager::setValue(const QString& key, const QVariant& value)
+{
+    QStringList keys = key.split('/');
+    if (keys.count() == 2)
+    {
+        const QString& settingsName = keys[0];
+        const QString& propertyName = keys[1];
+        foreach (Settings* settings, m_allSettings)
+        {
+            if (settings->objectName() == settingsName)
+            {
+                return settings->setProperty(propertyName.toLatin1(), value);
+            }
+        }
+    }
+    return false;
+}
+
+void SettingsManager::addSettings(Settings* settings)
+{
+    if (settings)
+    {
+        settings->setParent(this);
+        m_allSettings.append(settings);
+    }
+}
+
 
 /*********************************************************************************************************
 ** End of file

@@ -1,12 +1,13 @@
 #include "App.h"
 #include "MessageHandle.h"
+#include "Settings.h"
 
 #include <QTextCodec>
 App::App(int& argc, char** argv)
     : QApplication(argc, argv)
     , m_mainWindow(NULL)
     , m_logFilePath("")
-
+    , m_settingsManager(new SettingsManager)
 {
     showSplashMessage("test++++++++++++++");
 }
@@ -14,7 +15,7 @@ App::App(int& argc, char** argv)
 bool App::init()
 {
     //qInstallMessageHandler(myMessageOutput);
-    qInstallMessageHandler(myMessageOutput);
+    //TODO: qInstallMessageHandler(myMessageOutput);
 
     /*
      * @brief 加载欢迎界面
@@ -45,6 +46,14 @@ void App::showSplashMessage(const QString& message)
 void App::setLogFilePath(const QString &logFilePath)
 {
     m_logFilePath = logFilePath;
+}
+
+SettingsManager* App::settingsManager() const
+{
+    if (m_settingsManager != NULL)
+    {
+        return m_settingsManager;
+    }
 }
 
 QString App::logFilePath() const

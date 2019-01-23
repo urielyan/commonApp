@@ -15,15 +15,22 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDir>
+#include <QFileDialog>
+#include <LoginSettings.h>
 
 #include "LogWidget.h"
 #include "UserManager.h"
 #include "Login.h"
+#include "Settings.h"
 
 MainWindow *MainWindow::s_instance = 0;
 void MainWindow::initStackedWidget()
 {
     this->setCentralWidget(m_stackedWidget);
+
+    Settings *setting = new LoginSettings();
+    setting->setObjectName("login");
+    theApp->settingsManager()->addSettings(setting);
 }
 
 void MainWindow::initUserManagerWidget()
@@ -53,6 +60,21 @@ void MainWindow::initDataBaseManager(QString dbPath)
     Q_ASSERT(m_databaseManager->init() == true);
 }
 
+void MainWindow::initProfileManager()
+{
+    QAction *openProfile = new QAction(tr("打开配置文件"),this);
+    QAction *saveProfile = new QAction(tr("保存配置文件"),this);
+    connect(openProfile, &QAction::triggered,
+            this, &MainWindow::loadProfileActionClicked);
+    connect(saveProfile, &QAction::triggered,
+            this, &MainWindow::saveProfileActionClicked);
+
+    QMenu *profileMenu = new QMenu(tr("配置文件"),this);
+    profileMenu->addAction(openProfile);
+    profileMenu->addAction(saveProfile);
+    this->menuBar()->addMenu(profileMenu);
+}
+
 void MainWindow::userManaggerActionClicked()
 {
     UserManager *manager = new UserManager(this);
@@ -73,6 +95,36 @@ void MainWindow::openLogActionClicked()
     logWidget->initLogSelector(QFileInfo(theApp->logFilePath()).absolutePath());
     //"F:/SVNCode30.15/build-CarCarStudio-Desktop_Qt_5_9_0_MSVC2017_64bit-Debug/2019.01.16 16_24_59.laquaLog.txt"
     this->setCurrentWidget(logWidget, true);
+}
+
+void MainWindow::loadProfileActionClicked()
+{
+    QString path = QFileDialog::getOpenFileName(this
+                                               , tr("Load Profile")
+                                               , "C:/LaQua"
+                                               , tr("Profile (*.ini)"));
+    if (path.size() > 1 && !path.isEmpty())
+    {
+        theApp->settingsManager()->load(path);
+    }
+}
+
+void MainWindow::saveProfileActionClicked()
+{
+    QString path = QFileDialog::getSaveFileName(
+                this
+                , tr("Save Profile")
+                , "C:/LaQua"
+                , tr("Profile (*.ini)"));
+
+    if (path.size() > 1 && !path.isEmpty())
+    {
+        if (!path.contains(".ini"))
+        {
+            path.append(".ini");
+        }
+        theApp->settingsManager()->save(path);
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)

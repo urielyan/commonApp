@@ -55,9 +55,14 @@ protected:
     void initUserManagerWidget();
     void initDataBaseManager(QString dbPath);
 
+    void initProfileManager();
+
 protected slots:
     virtual void userManaggerActionClicked();
     virtual void openLogActionClicked();
+    virtual void loadProfileActionClicked();
+    virtual void saveProfileActionClicked();
+
 protected:
     static MainWindow *s_instance;
     QString m_currentUserName;
