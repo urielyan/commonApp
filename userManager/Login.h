@@ -22,7 +22,6 @@ public:
     void setMainWindow(MainWindow *mainWindow);
     bool isLogin();
 
-
 private slots:
 
     void on_login_clicked();

@@ -55,7 +55,7 @@ bool DataBaseManager::init()
     }
     else
     {
-        qDebug() << m_db->lastError().text() << QFile(m_databaseName).exists();
+        qWarning() << QStringLiteral("数据库初始化错误：") << m_db->lastError().text();
     }
 
     return false;
@@ -73,6 +73,7 @@ void DataBaseManager::setDb(QSqlDatabase *db)
 
 QSqlTableModel *DataBaseManager::model(QString tableName) const
 {
+    //qDebug() << tableName;
     Q_ASSERT(m_tables.contains(tableName));
     return m_tables.value(tableName, new QSqlTableModel());
 }
@@ -116,7 +117,7 @@ bool DataBaseManager::saveDataToTable(QString tableName, QStringList dataList)
     //qDebug() << m_db->tables();
 
 
-    qDebug() << dataList.size() <<  record.count() << tableName;
+    //qDebug() << dataList.size() <<  record.count() << tableName;
     Q_ASSERT(dataList.size() == record.count());
 
     for (int i = 0; i < dataList.size(); ++i)
@@ -127,7 +128,7 @@ bool DataBaseManager::saveDataToTable(QString tableName, QStringList dataList)
     bool isInsert = model.insertRecord(0, record);
     if(isInsert == false)
     {
-        qDebug() << model.lastError().text();
+        qWarning() << QStringLiteral("数据保存错误：") << model.lastError().text();
     }
     model.submitAll();
 
@@ -143,7 +144,7 @@ bool DataBaseManager::saveDataToTable(QString tableName, QSqlRecord record)
     bool isInsert = model->insertRecord(0, record);
     if(isInsert == false)
     {
-        qDebug() << model->lastError().text();
+        qDebug() << ( QStringLiteral("Database save data error：") + model->lastError().text());
     }
     model->submitAll();
 
@@ -197,7 +198,7 @@ bool DataBaseManager::createTable(QString tableName, QString recordNames)
     QString createTable = QString(
         "create table '%1' (%2)"
         ).arg(tableName).arg(recordNames);
-    qDebug() << createTable;
+    //qDebug() << createTable;
     if (!query.exec(createTable))
     {
         return false;

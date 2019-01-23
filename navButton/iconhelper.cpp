@@ -16,16 +16,16 @@ IconHelper *IconHelper::Instance()
 
 IconHelper::IconHelper(QObject *) : QObject(qApp)
 {
-    int fontId = QFontDatabase::addApplicationFont("qrc:/common/navButton/fontawesome-webfont.ttf");
+    int fontId = QFontDatabase::addApplicationFont(":/common/navButton/fontawesome-webfont.ttf");
     QStringList fontName = QFontDatabase::applicationFontFamilies(fontId);
 
     if (fontName.count() > 0) {
         iconFont = QFont(fontName.at(0));
     } else {
-        qDebug() << "load fontawesome-webfont.ttf error";
+        //qDebug() << "load fontawesome-webfont.ttf error";
     }
 
-    qDebug() << iconFont.toString();
+    //qDebug() << iconFont.toString();
 }
 
 void IconHelper::setIcon(QLabel *lab, QChar c, quint32 size)

@@ -8,3 +8,5 @@ SOURCES += \
 
 RESOURCES += \
     $$PWD/navButttonFont.qrc
+
+INCLUDEPATH += $$PWD

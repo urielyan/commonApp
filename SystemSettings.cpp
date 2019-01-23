@@ -56,11 +56,11 @@ QString SystemSettings::getCurrentAppDir()
 {
     QApplication *a = qobject_cast<QApplication*>(QApplication::instance());
     QString exeFile = a->applicationDirPath();
-    qDebug() << a->applicationDirPath() << a->applicationFilePath() << a->applicationDisplayName() << a->applicationVersion();
+    //qDebug() << a->applicationDirPath() << a->applicationFilePath() << a->applicationDisplayName() << a->applicationVersion();
     QFileInfo fileInfo(exeFile);
     QString appDir = fileInfo.absoluteFilePath();
 
-    qDebug() << __FUNCTION__ << appDir;
+    //qDebug() << __FUNCTION__ << appDir;
     return appDir;
 }
 

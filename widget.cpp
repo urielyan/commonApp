@@ -17,10 +17,10 @@ Widget::~Widget()
 
 void Widget::onEntry()
 {
-    qDebug() << this->objectName();
+    //qDebug() <<"Entry:" << this->objectName();
 }
 
 void Widget::onExit()
 {
-    qDebug() << this->objectName();
+    //qDebug() <<"Exit:" << this->objectName();
 }

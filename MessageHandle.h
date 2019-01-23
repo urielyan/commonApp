@@ -1,7 +1,7 @@
 #ifndef MESSAGEHANDLE_H
 #define MESSAGEHANDLE_H
 
-#include <QApplication>
+#include <App.h>
 #include <QFile>
 #include <QMutex>
 #include <QDateTime>
@@ -15,35 +15,40 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
     QByteArray localMsg = msg.toLocal8Bit();
 
-    QString strMsg("");
+    QString strMsg("LAQUA<!>");
     switch(type)
     {
     case QtDebugMsg:
-        strMsg = QString("Debug:");
+        strMsg = QString("Debug<!>");
         break;
     case QtWarningMsg:
-        strMsg = QString("Warning:");
+        strMsg = QString("Warning<!>");
         break;
     case QtCriticalMsg:
-        strMsg = QString("Critical:");
+        strMsg = QString("Critical<!>");
         break;
     case QtFatalMsg:
-        strMsg = QString("Fatal:");
+        strMsg = QString("Fatal<!>");
+    case QtInfoMsg:
+        strMsg = QString("Info<!>");
         break;
     }
 
     // 设置输出信息格式
     QString strDateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz");
-    QString strMessage = strMsg + QString("%1, File:%2, Line:%3, Function:%4, DateTime:%5\n")
+    QString strMessage = strMsg + QString("%1<!>File:%2<!>Line:%3<!>Function:%4<!>DateTime:%5<@>\n")
             .arg(localMsg.constData()).arg(context.file).arg(context.line).arg(context.function).arg(strDateTime);
     printf("%s", strMessage.toLocal8Bit().data());
 
     // 输出信息至文件中（读写、追加形式）
-    QString fileName = QDateTime::currentDateTime().toString("yyyy.MM.dd hh_mm_ss") + ".laquaLog.txt";
-    QFile file(fileName);
-    file.open(QIODevice::ReadWrite | QIODevice::Append);
-    QTextStream stream(&file);
-    stream << strMessage << "\r\n";
+    //QString fileName = theApp->logFilePath();
+    QFile file(theApp->logFilePath());
+    if (file.open(QIODevice::ReadWrite | QIODevice::Append))
+    {
+        QTextStream stream(&file);
+        stream.setCodec("UTF-8");
+        stream << strMessage << "\r\n";
+    }
     file.flush();
     file.close();
 

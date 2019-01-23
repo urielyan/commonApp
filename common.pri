@@ -14,7 +14,9 @@ HEADERS += \
     $$PWD/MainWindow.h \
     $$PWD/Settings.h \
     $$PWD/MessageHandle.h \
-    $$PWD/App.h
+    $$PWD/App.h \
+    $$PWD/ChatServer.h \
+    $$PWD/LogWidget.h
 
 SOURCES += \
     $$PWD/DataBase.cpp \
@@ -22,6 +24,9 @@ SOURCES += \
     $$PWD/widget.cpp \
     $$PWD/MainWindow.cpp \
     $$PWD/Settings.cpp \
-    $$PWD/App.cpp
+    $$PWD/App.cpp \
+    $$PWD/ChatServer.cpp \
+    $$PWD/LogWidget.cpp
 
-FORMS +=
+FORMS += \
+    $$PWD/LogWidget.ui

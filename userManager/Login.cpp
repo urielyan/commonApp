@@ -37,7 +37,7 @@ void Login::on_login_clicked()
         m_mainWindow->setCurrentUserName(ui->user->text());
         m_mainWindow->show();
         this->close();
-
+        this->accept();
         return;
     }
 
@@ -52,12 +52,13 @@ void Login::on_login_clicked()
     {
         QString passwd = query.value(USER_PASSWD).toString();
         int access = query.value(USER_ACCESSMODE).toInt();
-        qDebug() << passwd << ui->passwd->text();
+        //qDebug() << passwd << ui->passwd->text();
         if (passwd.compare(ui->passwd->text()) == 0)
         {
             m_mainWindow->setAccessMode(access);
             m_mainWindow->setCurrentUserName(ui->user->text());
-            m_mainWindow->show();
+            //m_mainWindow->show();
+            this->accept();
             this->close();
         }else
         {
@@ -82,7 +83,7 @@ void Login::on_login_clicked()
 
 void Login::on_quit_clicked()
 {
-    this->close();
+    this->reject();
     //delete m_mainWindow;
     //QApplication::instance()->quit();
     QApplication::instance()->exit(0);

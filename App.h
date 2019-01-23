@@ -26,6 +26,9 @@ public:
      * @return       操作成功返回true
      */
     virtual bool init();
+    QString logFilePath() const;
+    void setLogFilePath(const QString &logFilePath);
+
 signals:
 
 public slots:
@@ -37,6 +40,12 @@ private:
 
 private:
     void showSplashMessage(const QString &message);
+    QString m_logFilePath;
 };
+
+#if defined(theApp)
+#undef theApp
+#endif
+#define theApp (static_cast<App *>(QApplication::instance()))
 
 #endif // APP_H

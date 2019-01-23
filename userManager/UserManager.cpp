@@ -17,8 +17,6 @@ UserManager::UserManager(QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSortingEnabled(true);
-    qInfo() << "UserManager is aviliable";
-    qDebug() << "test+++++++++";
 }
 
 UserManager::~UserManager()
@@ -49,7 +47,7 @@ void UserManager::on_deleteSelectUser_clicked()
     QModelIndexList indexs = selectionModel->selectedIndexes();
 
     foreach (QModelIndex index, indexs) {
-//        qDebug() <<index.row();
+    //qDebug() <<index.row();
         m_model->removeRow(index.row());
     }
 
@@ -72,8 +70,8 @@ void UserManager::on_addUser_clicked()
     }
 
     m_model->insertRecord(0, addUser.data()->toSqlRecord());
-
-    qDebug() << m_model->submitAll() << m_model->lastError();
+    m_model->submitAll();
+    qInfo() << "增加用户：" <<  addUser.data()->userName()  << m_model->lastError();
     m_model->select();
 }
 
@@ -100,7 +98,8 @@ void UserManager::on_altPasswd_clicked()
 
     m_model->setData(indexs.value(1), alterPasswd.getNewPasswd());
 
-    qDebug() << m_model->submitAll();
+    m_model->submitAll();
+    //qDebug() << "修改密码：";
     m_model->select();
 }
 
