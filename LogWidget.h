@@ -11,6 +11,8 @@
 #ifndef LOGWIDGET_H
 #define LOGWIDGET_H
 
+#include "Widget.h"
+
 #include <QWidget>
 
 namespace Ui {
@@ -18,7 +20,7 @@ class LogWidget;
 }
 
 class QStandardItemModel;
-class LogWidget : public QWidget
+class LogWidget : public Widget
 {
     Q_OBJECT
 

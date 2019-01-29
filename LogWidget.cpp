@@ -7,7 +7,7 @@
 #include <QDir>
 
 LogWidget::LogWidget(QWidget *parent) :
-    QWidget(parent),
+    Widget(parent),
     ui(new Ui::LogWidget)
   , m_model(new QStandardItemModel(this))
 
@@ -58,7 +58,6 @@ void LogWidget::fromFile(QString path)
     m_model->setHeaderData(5, Qt::Horizontal, "日期");
 
     ui->tableView->resizeColumnsToContents();
-    ui->tableView->resizeColumnToContents(0);
 }
 
 void LogWidget::initLogSelector(QString dirPath)

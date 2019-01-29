@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMainWindow>
 #include <QWidget>
+#include <Settings.h>
 
 namespace Ui {
 class Login;
