@@ -38,6 +38,8 @@ public:
      * @note
      */
     SettingsManager* settingsManager() const;
+    void saveSettings();
+    void loadSettings();
 
 signals:
 

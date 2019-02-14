@@ -16,7 +16,7 @@ QString LoginSettings::userName() const
 
 void LoginSettings::setUserName(const QString &userName)
 {
-    if (m_userName == userName)
+    if (m_userName != userName)
     {
         emit userNameChanged();
         m_userName = userName;
@@ -35,7 +35,7 @@ QString LoginSettings::passwd() const
 
 void LoginSettings::setPasswd(const QString &passwd)
 {
-    if (m_passwd == passwd)
+    if (m_passwd != passwd)
     {
         m_passwd = passwd;
         emit passwdChanged();
@@ -54,7 +54,7 @@ bool LoginSettings::isSaved() const
 
 void LoginSettings::setIsSaved(bool isSaved)
 {
-    if (m_isSaved == isSaved)
+    if (m_isSaved != isSaved)
     {
         m_isSaved = isSaved;
         emit isSavedChanged();

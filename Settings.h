@@ -145,7 +145,7 @@ public:
     QString getName() const{return name;}
     void setName(const QString &value)
     {
-        if (name == value)
+        if (name != value)
         {
             emit nameChanged();
             name = value;

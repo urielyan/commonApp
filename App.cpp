@@ -50,10 +50,17 @@ void App::setLogFilePath(const QString &logFilePath)
 
 SettingsManager* App::settingsManager() const
 {
-    if (m_settingsManager != NULL)
-    {
-        return m_settingsManager;
-    }
+    return m_settingsManager;
+}
+
+void App::saveSettings()
+{
+    m_settingsManager->save("C:/LaQua/profile/default.ini");
+}
+
+void App::loadSettings()
+{
+    m_settingsManager->load("C:/LaQua/profile/default.ini");
 }
 
 QString App::logFilePath() const

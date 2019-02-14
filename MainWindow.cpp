@@ -127,6 +127,8 @@ void MainWindow::saveProfileActionClicked()
     }
 }
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_databaseManager(new DataBaseManager(this))

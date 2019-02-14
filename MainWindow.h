@@ -53,15 +53,22 @@ protected:
      * @note
      */
     void initUserManagerWidget();
+
+    /**
+     * @brief 在子类中调用：根据数据库路径初始化数据库。
+     * @param[in] dbPath： 数据库路径
+     * @return
+     * @note
+     */
     void initDataBaseManager(QString dbPath);
 
     void initProfileManager();
 
 protected slots:
-    virtual void userManaggerActionClicked();
-    virtual void openLogActionClicked();
-    virtual void loadProfileActionClicked();
-    virtual void saveProfileActionClicked();
+    void userManaggerActionClicked();
+    void openLogActionClicked();
+    void loadProfileActionClicked();
+    void saveProfileActionClicked();
 
 protected:
     static MainWindow *s_instance;
