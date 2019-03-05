@@ -14,6 +14,23 @@ App::App(int& argc, char** argv)
 
 bool App::init()
 {
+    //设置字体编码和字体
+#if (QT_VERSION <= QT_VERSION_CHECK(5,0,0))
+#if _MSC_VER
+    QTextCodec *codec = QTextCodec::codecForName("gbk");
+#else
+    QTextCodec *codec = QTextCodec::codecForName("utf-8");
+#endif
+    QTextCodec::setCodecForLocale(codec);
+    QTextCodec::setCodecForCStrings(codec);
+    QTextCodec::setCodecForTr(codec);
+#else
+    QTextCodec *codec = QTextCodec::codecForName("utf-8");
+    QTextCodec::setCodecForLocale(codec);
+#endif
+    //设置全局字体
+    setFont(QFont("Microsoft Yahei", 14, QFont::Bold));
+
     //qInstallMessageHandler(myMessageOutput);
     //TODO: qInstallMessageHandler(myMessageOutput);
 
@@ -25,10 +42,7 @@ bool App::init()
     //qDebug("Painting splash-screen page ...");
     //m_splash.show();
 
-    //设置全局字体
-    setFont(QFont("Microsoft Yahei", 14, QFont::Bold));
 
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName( "utf8" ) );
     return true;
 }
 
